@@ -1,0 +1,51 @@
+{
+  "name": "gendiff-by-amalker",
+  "version": "0.1.0",
+  "description": "Difference generator - compares two configuration files and shows a difference.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/it-amalker/frontend-project-lvl2.git"
+  },
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "hexlet",
+    "learning",
+    "javascript",
+    "difference generator",
+    "CLI app"
+  ],
+  "author": "amalker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/it-amalker/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/it-amalker/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jest": "^23.6.0",
+    "jest": "^24.9.0"
+  }
+}
