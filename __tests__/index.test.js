@@ -1,27 +1,16 @@
+import fs from 'fs';
 import getDiff from '../src';
 
-const path1 = './__tests__/json_test/json1';
-const path2 = './__tests__/json_test/json2';
-const path3 = './__tests__/json_test/json3';
-const path4 = './__tests__/json_test/json4';
+const path = `${__dirname}/__fixtures__/`;
+
+const expected1 = String(fs.readFileSync(`${path}expectedString1`));
+const expected2 = String(fs.readFileSync(`${path}expectedString2`));
+const expected3 = String(fs.readFileSync(`${path}expectedString3`));
+const expected4 = String(fs.readFileSync(`${path}expectedString4`));
 
 test('getDiff', () => {
-  expect(getDiff(path1, path2)).toBe(`{
-    host: hexlet.io
-  + timeout: 20
-  - timeout: 50
-  - proxy: 123.234.53.22
-  - follow: false
-  + verbose: true
-}`);
-});
-
-test('getDiff', () => {
-  expect(getDiff(path3, path4)).toBe(`{
-    name: John
-  + age: 42
-  - age: 32
-  - country: USA
-  + surname: Johnson
-}`);
+  expect(getDiff(`${path}json1`, `${path}json2`)).toBe(expected1);
+  expect(getDiff(`${path}json3`, `${path}json4`)).toBe(expected2);
+  expect(getDiff(`${path}json5`, `${path}json6`)).toBe(expected3);
+  expect(getDiff(`${path}json7`, `${path}json8`)).toBe(expected4);
 });
