@@ -1,8 +1,8 @@
 {
   "name": "gendiff-by-amalker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Difference generator - compares two configuration files and shows a difference.",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/it-amalker/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^4.1.0"
+    "commander": "^4.1.0",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
