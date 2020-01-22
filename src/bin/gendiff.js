@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import program from 'commander';
+import genDiff from '..';
 
 program
   .description('Compares two configuration files and shows a difference.')
@@ -9,17 +10,14 @@ program
     const { format } = program;
     const outputFormats = ['json', 'plain'];
     const isCorrectFormat = outputFormats.includes(format.toLowerCase());
-    if (isCorrectFormat) {
-      console.log('Format type:', format);
-    } else {
+    if (!isCorrectFormat) {
       console.error(`incorrect format type, use [${outputFormats.join(', ')}]`);
       process.exit(1);
     }
   })
   .arguments('<firstConfig> <secondConfig>')
   .action((firstConfig, secondConfig) => {
-    console.log('First config path:', firstConfig);
-    console.log('Second config path:', secondConfig);
+    console.log(genDiff(firstConfig, secondConfig));
   });
 
 program.parse(process.argv);
