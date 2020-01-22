@@ -4,7 +4,7 @@
   "description": "Difference generator - compares two configuration files and shows a difference.",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
     "prepublishOnly": "npm run build"
   },
@@ -25,10 +25,16 @@
     "difference generator",
     "CLI app"
   ],
-  "author": "amalker",
+  "author": "Vadim Dmitrenko (amalker) <it.amalker@yandex.ru>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/it-amalker/frontend-project-lvl2/issues"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov"
+    ]
   },
   "homepage": "https://github.com/it-amalker/frontend-project-lvl2#readme",
   "dependencies": {
