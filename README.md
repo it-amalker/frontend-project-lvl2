@@ -16,3 +16,6 @@ $ gendiff -f plain <pathToFile1> <pathToFile2>
 
 #### Compare two YAML files
 [![asciicast](https://asciinema.org/a/295536.svg)](https://asciinema.org/a/295536)
+
+#### Compare two INI files
+[![asciicast](https://asciinema.org/a/295619.svg)](https://asciinema.org/a/295619)
