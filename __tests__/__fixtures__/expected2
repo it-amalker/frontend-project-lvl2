@@ -1,7 +1,7 @@
 {
-    name: John
   + age: 42
   - age: 32
   - country: USA
+    name: John
   + surname: Johnson
 }
