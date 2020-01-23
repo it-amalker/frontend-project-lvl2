@@ -9,6 +9,10 @@
 
 ### How to start app:
 ```
-$ gendiff -f plaintext <pathToFile1> <pathToFile2>
+$ gendiff -f plain <pathToFile1> <pathToFile2>
 ```
+#### Compare two JSON files
 [![asciicast](https://asciinema.org/a/295379.svg)](https://asciinema.org/a/295379)
+
+#### Compare two YAML files
+[![asciicast](https://asciinema.org/a/295536.svg)](https://asciinema.org/a/295536)
