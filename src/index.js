@@ -66,12 +66,13 @@ const render = (ast) => {
       const nameAst = key;
       const valueAst = JSON.stringify(value[0].value || value[0].valuePrev);
       const statusAst = value[0].status;
-      const stringify = (str) => (typeof str === 'string' ? str.replace(/"+/g, '') : str);
+      const stringify = (str) => (typeof str === 'string' ? str.replace(/(^")|("$)/g, '') : str);
       const formatObj = (item) => {
         const jsonItem = JSON.parse(item);
         if (jsonItem instanceof Object) {
-          const itemKey = Object.keys(jsonItem);
-          return `{\n${' '.repeat(4 * (currentDepth + 1))}${itemKey}: ${stringify(jsonItem[itemKey])}\n${' '.repeat(4 * currentDepth)}}`;
+          const itemKeys = Object.keys(jsonItem);
+          const allItems = itemKeys.map((itemKey) => `${' '.repeat(4 * (currentDepth + 1))}${itemKey}: ${stringify(jsonItem[itemKey])}`);
+          return `{\n${allItems.join('\n')}\n${' '.repeat(4 * currentDepth)}}`;
         }
         return stringify(item);
       };
