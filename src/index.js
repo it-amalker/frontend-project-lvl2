@@ -18,14 +18,20 @@ const diff = (arg1, arg2) => {
       children: [],
       status: '',
     };
+    const compareArray = (arr1, arr2) => arr1.every((e) => arr2.includes(e));
+
     if (isKeyInObj1 && isKeyInObj2) {
-      if (obj1[key] instanceof Object && obj2[key] instanceof Object) {
+      if (obj1[key] instanceof Object && obj2[key] instanceof Object && !Array.isArray(obj1[key]) && !Array.isArray(obj2[key])) {
         ast.status = 'unchanged';
         ast.type = 'children';
       } else {
         ast.value = obj1[key];
         ast.valuePrev = obj2[key];
-        ast.status = ast.value === ast.valuePrev ? 'unchanged' : 'changed';
+        if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+          ast.status = compareArray(obj1[key], obj2[key]) ? 'unchanged' : 'changed';
+        } else {
+          ast.status = ast.value === ast.valuePrev ? 'unchanged' : 'changed';
+        }
       }
     }
     if (isKeyInObj1 && !isKeyInObj2) {
@@ -69,6 +75,10 @@ const render = (ast) => {
       const stringify = (str) => (typeof str === 'string' ? str.replace(/(^")|("$)/g, '') : str);
       const formatObj = (item) => {
         const jsonItem = JSON.parse(item);
+        if (Array.isArray(jsonItem)) {
+          const allItems = jsonItem.map((itemKey) => `${' '.repeat(4 * (currentDepth + 1))}${itemKey}`);
+          return `[\n${allItems.join('\n')}\n${' '.repeat(4 * currentDepth)}]`;
+        }
         if (jsonItem instanceof Object) {
           const itemKeys = Object.keys(jsonItem);
           const allItems = itemKeys.map((itemKey) => `${' '.repeat(4 * (currentDepth + 1))}${itemKey}: ${stringify(jsonItem[itemKey])}`);
