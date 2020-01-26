@@ -19,3 +19,6 @@ $ gendiff -f plain <pathToFile1> <pathToFile2>
 
 #### Compare two INI files
 [![asciicast](https://asciinema.org/a/295619.svg)](https://asciinema.org/a/295619)
+
+#### Full recursive view of tree comparing
+[![asciicast](https://asciinema.org/a/296088.svg)](https://asciinema.org/a/296088)
