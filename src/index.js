@@ -21,7 +21,8 @@ const diff = (arg1, arg2) => {
     const compareArray = (arr1, arr2) => arr1.every((e) => arr2.includes(e));
 
     if (isKeyInObj1 && isKeyInObj2) {
-      if (obj1[key] instanceof Object && obj2[key] instanceof Object && !Array.isArray(obj1[key]) && !Array.isArray(obj2[key])) {
+      if (obj1[key] instanceof Object && obj2[key] instanceof Object
+      && !Array.isArray(obj1[key]) && !Array.isArray(obj2[key])) {
         ast.status = 'unchanged';
         ast.type = 'children';
       } else {
