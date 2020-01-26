@@ -15,9 +15,6 @@ export default (pathToFile) => {
   const fileFormat = _.findKey(formats, ['extension', fileExtension]);
   const parser = formats[fileFormat].parserType;
   const result = parser(data);
-  if (fileExtension === '.ini') {
-    return Object.values(result).reduce((acc, value) => Object.assign(acc, value), {});
-  }
 
   return result === null ? '' : result;
 };
