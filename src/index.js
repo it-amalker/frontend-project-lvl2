@@ -1,58 +1,63 @@
 import _ from 'lodash';
 import parse from './parsers';
 
-const diff = (arg1, arg2) => {
-  const obj1 = _.isEmpty(arg1) ? {} : arg1;
-  const obj2 = _.isEmpty(arg2) ? {} : arg2;
+const diff = (object1, object2) => {
+  const commonKeys = _.uniq(Object.keys(object1).concat(Object.keys(object2)));
 
-  const allKeys = _.uniq(Object.keys(obj1).concat(Object.keys(obj2)));
+  const result = commonKeys.sort().reduce((acc, key) => {
+    const value1 = object1[key];
+    const value2 = object2[key];
+    const buildAstNode = (obj1, obj2) => {
+      const node = {
+        type: '',
+        name: key,
+        value: '',
+        valuePrev: '',
+        children: [],
+        status: '',
+      };
+      const compareArray = (arr1, arr2) => arr1.every((el) => arr2.includes(el));
+      const isObjects = (...items) => items.every((obj) => obj instanceof Object);
+      const isArrays = (...items) => items.every((arr) => Array.isArray(arr));
+      const isKeyInObj1 = _.has(obj1, key);
+      const isKeyInObj2 = _.has(obj2, key);
 
-  const result = allKeys.sort().reduce((acc, key) => {
-    const isKeyInObj1 = _.has(obj1, key);
-    const isKeyInObj2 = _.has(obj2, key);
-    const ast = {
-      type: '',
-      name: key,
-      value: '',
-      valuePrev: '',
-      children: [],
-      status: '',
-    };
-    const compareArray = (arr1, arr2) => arr1.every((e) => arr2.includes(e));
-
-    if (isKeyInObj1 && isKeyInObj2) {
-      if (obj1[key] instanceof Object && obj2[key] instanceof Object
-      && !Array.isArray(obj1[key]) && !Array.isArray(obj2[key])) {
-        ast.status = 'unchanged';
-        ast.type = 'children';
-      } else {
-        ast.value = obj1[key];
-        ast.valuePrev = obj2[key];
-        if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
-          ast.status = compareArray(obj1[key], obj2[key]) ? 'unchanged' : 'changed';
+      if (isKeyInObj1 && isKeyInObj2) {
+        if (isObjects(value1, value2) && !isArrays(value1, value2)) {
+          node.status = 'unchanged';
+          node.type = 'children';
         } else {
-          ast.status = ast.value === ast.valuePrev ? 'unchanged' : 'changed';
+          node.value = value1;
+          node.valuePrev = value2;
+          if (isArrays(value1, value2)) {
+            node.status = compareArray(value1, value2) ? 'unchanged' : 'changed';
+          } else {
+            node.status = node.value === node.valuePrev ? 'unchanged' : 'changed';
+          }
         }
       }
-    }
-    if (isKeyInObj1 && !isKeyInObj2) {
-      ast.value = obj1[key];
-      ast.status = 'removed';
-    }
-    if (!isKeyInObj1 && isKeyInObj2) {
-      ast.valuePrev = obj2[key];
-      ast.status = 'added';
-    }
+      if (isKeyInObj1 && !isKeyInObj2) {
+        node.value = value1;
+        node.status = 'removed';
+      }
+      if (!isKeyInObj1 && isKeyInObj2) {
+        node.valuePrev = value2;
+        node.status = 'added';
+      }
+      return node;
+    };
+
+    const astNode = buildAstNode(object1, object2);
 
     if (!acc[key]) {
       acc[key] = [];
     }
-    if (ast.type === 'children') {
-      const child1 = obj1[key];
-      const child2 = obj2[key];
-      acc[key].push({ ...ast, children: diff(child1, child2) });
+    if (astNode.type === 'children') {
+      const child1 = value1;
+      const child2 = value2;
+      acc[key].push({ ...astNode, children: diff(child1, child2) });
     } else {
-      acc[key].push(ast);
+      acc[key].push(astNode);
     }
     return acc;
   }, {});
