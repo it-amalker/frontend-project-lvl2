@@ -11,14 +11,17 @@
 ```
 $ gendiff -f plain <pathToFile1> <pathToFile2>
 ```
-#### Compare two JSON files
+#### Compare two JSON files with default output
 [![asciicast](https://asciinema.org/a/295379.svg)](https://asciinema.org/a/295379)
 
-#### Compare two YAML files
+#### Compare two YAML files with default output
 [![asciicast](https://asciinema.org/a/295536.svg)](https://asciinema.org/a/295536)
 
-#### Compare two INI files
+#### Compare two INI files with default output
 [![asciicast](https://asciinema.org/a/295619.svg)](https://asciinema.org/a/295619)
 
-#### Full recursive view of tree comparing
+#### Full recursive view of tree comparing with default output
 [![asciicast](https://asciinema.org/a/296088.svg)](https://asciinema.org/a/296088)
+
+#### Full recursive view of tree comparing with plain output
+[![asciicast](https://asciinema.org/a/296231.svg)](https://asciinema.org/a/296231)
