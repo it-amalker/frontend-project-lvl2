@@ -7,6 +7,7 @@ const expected1 = String(fs.readFileSync(`${path}expected1`));
 const expected2 = String(fs.readFileSync(`${path}expected2`));
 const expected3 = String(fs.readFileSync(`${path}expected3`));
 const expected4 = String(fs.readFileSync(`${path}expected4`));
+const expectedPlain2 = String(fs.readFileSync(`${path}expected2-plain`));
 
 test.each`
   a                 | b                 | expected
@@ -15,6 +16,13 @@ test.each`
   ${`${path}json5`} | ${`${path}json6`} | ${expected3}
 `('JSON', ({ a, b, expected }) => {
   expect(genDiff(a, b)).toBe(expected);
+});
+
+test.each`
+  a                 | b                 | expected
+  ${`${path}json3`} | ${`${path}json4`} | ${expectedPlain2}
+`('JSON (plain output)', ({ a, b, expected }) => {
+  expect(genDiff(a, b, 'plain')).toBe(expected);
 });
 
 test.each`
