@@ -8,19 +8,21 @@ export default (ast) => {
       } = treeValue[0];
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
       const isComplexValue = (item) => (isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
-      if (type === 'children') {
-        return [...acc, `${iterAst(children, currentPath)}`];
-      }
-      if (status === 'changed') {
-        return [...acc, `Property '${currentPath}' was changed. From ${isComplexValue(value)} to ${isComplexValue(valuePrev)}`];
-      }
-      if (status === 'removed') {
-        return [...acc, `Property '${currentPath}' was deleted`];
-      }
-      if (status === 'added') {
-        return [...acc, `Property '${currentPath}' was added with value: ${isComplexValue(valuePrev)}`];
-      }
-      return acc;
+      const renderString = (treeStatus) => {
+        const newValue = isComplexValue(value);
+        const newValuePrev = isComplexValue(valuePrev);
+        switch (treeStatus) {
+          case 'changed':
+            return [...acc, `Property '${currentPath}' was changed. From ${newValue} to ${newValuePrev}`];
+          case 'removed':
+            return [...acc, `Property '${currentPath}' was deleted`];
+          case 'added':
+            return [...acc, `Property '${currentPath}' was added with value: ${newValuePrev}`];
+          default:
+            return acc;
+        }
+      };
+      return type === 'children' ? [...acc, `${iterAst(children, currentPath)}`] : renderString(status);
     }, []);
 
     return `${rendered.join('\n')}`;
