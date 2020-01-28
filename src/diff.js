@@ -1,7 +1,5 @@
 import _ from 'lodash';
-
-export const isObject = (...items) => items.every((obj) => obj instanceof Object);
-export const isArray = (...items) => items.every((arr) => Array.isArray(arr));
+import { isArray, isObject } from './utils';
 
 const diff = (object1, object2) => {
   const commonKeys = _.uniq(Object.keys(object1).concat(Object.keys(object2)));

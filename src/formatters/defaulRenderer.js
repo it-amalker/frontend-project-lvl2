@@ -1,4 +1,4 @@
-import { isArray, isObject } from '../diff';
+import { isArray, isObject } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, depth) => {

@@ -1,4 +1,4 @@
-import { isObject } from '../diff';
+import { isObject, stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, path) => {
@@ -7,7 +7,7 @@ export default (ast) => {
         name, status, type, value, valuePrev, children,
       } = treeValue[0];
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
-      const isComplexValue = (item) => (isObject(item) ? '[complex value]' : `'${item}'`);
+      const isComplexValue = (item) => (isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
       if (type === 'children') {
         return [...acc, `${iterAst(children, currentPath)}`];
       }
