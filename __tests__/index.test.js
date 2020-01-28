@@ -3,42 +3,34 @@ import genDiff from '../src';
 
 const path = `${__dirname}/../__fixtures__/`;
 
-const expected1 = String(fs.readFileSync(`${path}expected1`));
-const expected2 = String(fs.readFileSync(`${path}expected2`));
-const expected3 = String(fs.readFileSync(`${path}expected3`));
-const expected4 = String(fs.readFileSync(`${path}expected4`));
-const expectedPlain2 = String(fs.readFileSync(`${path}expected2-plain`));
+const default1 = String(fs.readFileSync(`${path}expected1`));
+const default2 = String(fs.readFileSync(`${path}expected2`));
+const default3 = String(fs.readFileSync(`${path}expected3`));
+const default4 = String(fs.readFileSync(`${path}expected4`));
+const plain1 = String(fs.readFileSync(`${path}expected1-plain`));
+const plain2 = String(fs.readFileSync(`${path}expected2-plain`));
+const plain3 = String(fs.readFileSync(`${path}expected3-plain`));
+const plain4 = String(fs.readFileSync(`${path}expected4-plain`));
 
-test.each`
-  a                 | b                 | expected
-  ${`${path}json1`} | ${`${path}json2`} | ${expected1}
-  ${`${path}json3`} | ${`${path}json4`} | ${expected2}
-  ${`${path}json5`} | ${`${path}json6`} | ${expected3}
-`('JSON', ({ a, b, expected }) => {
-  expect(genDiff(a, b)).toBe(expected);
-});
+describe.only.each`
+  format       |  file1                 | file2                 | normal       | plain     
+  ${'JSON #1'} |  ${`${path}json1`}     | ${`${path}json2`}     | ${default1}  | ${plain1}
+  ${'JSON #2'} |  ${`${path}json3`}     | ${`${path}json4`}     | ${default2}  | ${plain2}
+  ${'JSON #3'} |  ${`${path}json5`}     | ${`${path}json6`}     | ${default3}  | ${plain3}
+  ${'YAML #1'} |  ${`${path}yaml1.yml`} | ${`${path}yaml2.yml`} | ${default1}  | ${plain1}
+  ${'YAML #2'} |  ${`${path}yaml3.yml`} | ${`${path}yaml4.yml`} | ${default2}  | ${plain2}
+  ${'YAML #3'} |  ${`${path}yaml5.yml`} | ${`${path}yaml6.yml`} | ${default3}  | ${plain3}
+  ${'INI #1'}  |  ${`${path}conf1.ini`} | ${`${path}conf2.ini`} | ${default4}  | ${plain4}
+  ${'INI #2'}  |  ${`${path}conf3.ini`} | ${`${path}conf4.ini`} | ${default2}  | ${plain2}
+  ${'INI #3'}  |  ${`${path}conf5.ini`} | ${`${path}conf6.ini`} | ${default3}  | ${plain3}
+`('TESTS', ({
+  format, file1, file2, normal, plain,
+}) => {
+  test(`${format} (default)`, () => {
+    expect(genDiff(file1, file2)).toBe(normal);
+  });
 
-test.each`
-  a                 | b                 | expected
-  ${`${path}json3`} | ${`${path}json4`} | ${expectedPlain2}
-`('JSON (plain output)', ({ a, b, expected }) => {
-  expect(genDiff(a, b, 'plain')).toBe(expected);
-});
-
-test.each`
-  a                     | b                     | expected
-  ${`${path}yaml1.yml`} | ${`${path}yaml2.yml`} | ${expected1}
-  ${`${path}yaml3.yml`} | ${`${path}yaml4.yml`} | ${expected2}
-  ${`${path}yaml5.yml`} | ${`${path}yaml6.yml`} | ${expected3}
-`('YAML', ({ a, b, expected }) => {
-  expect(genDiff(a, b)).toBe(expected);
-});
-
-test.each`
-  a                     | b                     | expected
-  ${`${path}conf1.ini`} | ${`${path}conf2.ini`} | ${expected4}
-  ${`${path}conf3.ini`} | ${`${path}conf4.ini`} | ${expected2}
-  ${`${path}conf5.ini`} | ${`${path}conf6.ini`} | ${expected3}
-`('INI', ({ a, b, expected }) => {
-  expect(genDiff(a, b)).toBe(expected);
+  test(`${format} (plain)`, () => {
+    expect(genDiff(file1, file2, 'plain')).toBe(plain);
+  });
 });

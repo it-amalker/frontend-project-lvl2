@@ -1,0 +1,23 @@
+Property 'bin.brain-games' was deleted
+Property 'bin.gendiff' was added with value: 'dist/bin/gendiff.js'
+Property 'bugs.url' was changed. From 'https://github.com/it-amalker/frontend-project-lvl1/issues' to 'https://github.com/it-amalker/frontend-project-lvl2/issues'
+Property 'dependencies.commander' was added with value: '^4.1.0'
+Property 'dependencies.ini' was added with value: '^1.3.5'
+Property 'dependencies.js-yaml' was added with value: '^3.13.1'
+Property 'dependencies.lodash' was added with value: '^4.17.15'
+Property 'dependencies.readline-sync' was deleted
+Property 'devDependencies.@babel/cli' was changed. From '^7.7.7' to '^7.8.3'
+Property 'devDependencies.@babel/core' was changed. From '^7.7.7' to '^7.8.3'
+Property 'devDependencies.@babel/node' was changed. From '^7.7.7' to '^7.8.3'
+Property 'devDependencies.@babel/preset-env' was changed. From '^7.7.7' to '^7.8.3'
+Property 'devDependencies.eslint-plugin-import' was changed. From '^2.19.1' to '^2.20.0'
+Property 'devDependencies.eslint-plugin-jest' was added with value: '^23.6.0'
+Property 'homepage.homepage' was changed. From 'https://github.com/it-amalker/frontend-project-lvl1#readme' to 'https://github.com/it-amalker/frontend-project-lvl2#readme'
+Property 'jest' was added with value: [complex value]
+Property 'main.author' was changed. From 'amalker' to 'Vadim Dmitrenko (amalker) <it.amalker@yandex.ru>'
+Property 'main.description' was changed. From 'Hexlet Brain Games - mini-games to train your brain' to 'Difference generator - compares two configuration files and shows a difference.'
+Property 'main.main' was changed. From '' to './src/index.js'
+Property 'main.name' was changed. From 'braingames-by-amalker' to 'gendiff-by-amalker'
+Property 'main.version' was changed. From '0.11.0' to '0.4.0'
+Property 'repository.url' was changed. From 'git+https://github.com/it-amalker/frontend-project-lvl1.git' to 'git+https://github.com/it-amalker/frontend-project-lvl2.git'
+Property 'scripts.test' was changed. From 'echo \"Error: no test specified\" && exit 1' to 'jest'
