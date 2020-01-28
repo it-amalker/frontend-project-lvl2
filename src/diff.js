@@ -1,64 +1,55 @@
 import _ from 'lodash';
-import { isArray, isObject } from './utils';
+import { isArray, compareArray, isExactlyObject } from './utils';
 
 const diff = (object1, object2) => {
   const commonKeys = _.uniq(Object.keys(object1).concat(Object.keys(object2)));
-
   const ast = commonKeys.sort().reduce((acc, key) => {
     const value1 = object1[key];
     const value2 = object2[key];
+    const isValuesAreObjects = isExactlyObject(value1, value2);
     const buildAstNode = (obj1, obj2) => {
-      const node = {
-        type: '',
-        name: key,
-        value: '',
-        valuePrev: '',
-        children: [],
-        status: '',
-      };
-      const compareArray = (arr1, arr2) => arr1.every((el) => arr2.includes(el));
-      const isKeyInObj1 = _.has(obj1, key);
-      const isKeyInObj2 = _.has(obj2, key);
-
-      if (isKeyInObj1 && isKeyInObj2) {
-        if (isObject(value1, value2) && !isArray(value1, value2)) {
-          node.status = 'unchanged';
-          node.type = 'children';
-        } else {
-          node.value = value1;
-          node.valuePrev = value2;
-          if (isArray(value1, value2)) {
-            node.status = compareArray(value1, value2) ? 'unchanged' : 'changed';
-          } else {
-            node.status = node.value === node.valuePrev ? 'unchanged' : 'changed';
-          }
+      const checkStatus = (arg1, arg2) => {
+        if (isArray(arg1, arg2)) {
+          return compareArray(value1, value2) ? 'unchanged' : 'changed';
         }
-      }
-      if (isKeyInObj1 && !isKeyInObj2) {
-        node.value = value1;
-        node.status = 'removed';
-      }
-      if (!isKeyInObj1 && isKeyInObj2) {
-        node.valuePrev = value2;
-        node.status = 'added';
-      }
-      return node;
+        return arg1 === arg2 ? 'unchanged' : 'changed';
+      };
+      const nodeProperties = [
+        {
+          type: isValuesAreObjects ? 'children' : 'regular',
+          status: isValuesAreObjects ? 'unchanged' : checkStatus(value1, value2),
+          value: isValuesAreObjects ? '' : value1,
+          valuePrev: isValuesAreObjects ? '' : value2,
+          check: (arg1, arg2) => arg1 && arg2,
+        },
+        {
+          status: 'removed',
+          value: value1,
+          check: (arg1, arg2) => arg1 && !arg2,
+        },
+        {
+          status: 'added',
+          valuePrev: value2,
+          check: (arg1, arg2) => !arg1 && arg2,
+        },
+      ];
+      const checkConditions = (arg1, arg2) => nodeProperties.find(({ check }) => check(arg1, arg2));
+      const {
+        type = '', status, value = '', valuePrev = '',
+      } = checkConditions(_.has(obj1, key), _.has(obj2, key));
+      return {
+        name: key, type, status, value, valuePrev,
+      };
     };
-
-    const astNode = buildAstNode(object1, object2);
+    const node = buildAstNode(object1, object2);
+    const astNode = node.type === 'children'
+      ? { ...node, children: diff(value1, value2) } : node;
     if (!acc[key]) {
       acc[key] = [];
     }
-    if (astNode.type === 'children') {
-      const child1 = value1;
-      const child2 = value2;
-      acc[key].push({ ...astNode, children: diff(child1, child2) });
-    } else {
-      acc[key].push(astNode);
-    }
+    acc[key].push(astNode);
     return acc;
   }, {});
-
   return ast;
 };
 
