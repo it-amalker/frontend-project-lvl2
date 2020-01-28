@@ -1,18 +1,18 @@
 import parse from './parsers';
 import diff from './diff';
-import defaultRenderer from './formatters/defaulRenderer';
-import plain from './formatters/plain';
+import defaultRender from './formatters/defaultRender';
+import plainRender from './formatters/plain';
 
 
 export default (pathToFile1, pathToFile2, format) => {
   const getRenderer = (outputFormat) => {
     switch (outputFormat) {
       case 'plain':
-        return plain;
+        return plainRender;
       // case 'json':
         // return json;
       default:
-        return defaultRenderer;
+        return defaultRender;
     }
   };
   const render = getRenderer(format);
