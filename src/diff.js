@@ -35,7 +35,7 @@ const diff = (object1, object2) => {
       ];
       const checkConditions = (arg1, arg2) => nodeProperties.find(({ check }) => check(arg1, arg2));
       const {
-        type = '', status, value = '', valuePrev = '',
+        type = 'regular', status, value = '', valuePrev = '',
       } = checkConditions(_.has(obj1, key), _.has(obj2, key));
       return {
         name: key, type, status, value, valuePrev,
