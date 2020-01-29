@@ -1,5 +1,5 @@
 import parse from './parsers';
-import diff from './diff';
+import genDiff from './diff';
 import defaultRender from './formatters/defaultRender';
 import plainRender from './formatters/plain';
 import jsonRender from './formatters/json';
@@ -16,5 +16,6 @@ export default (pathToFile1, pathToFile2, format) => {
     }
   };
   const render = getRenderer(format);
-  return render(diff(parse(pathToFile1), parse(pathToFile2)));
+  const filesDifference = genDiff(parse(pathToFile1), parse(pathToFile2));
+  return render(filesDifference);
 };

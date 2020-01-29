@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { isArray, compareArray, isExactlyObject } from './utils';
 
-const diff = (object1, object2) => {
+const genDiff = (object1, object2) => {
   const commonKeys = _.uniq(Object.keys(object1).concat(Object.keys(object2)));
   const ast = commonKeys.sort().reduce((acc, key) => {
     const value1 = object1[key];
@@ -43,7 +43,7 @@ const diff = (object1, object2) => {
     };
     const node = buildAstNode(object1, object2);
     const astNode = node.type === 'children'
-      ? { ...node, children: diff(value1, value2) } : node;
+      ? { ...node, children: genDiff(value1, value2) } : node;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -53,4 +53,4 @@ const diff = (object1, object2) => {
   return ast;
 };
 
-export default diff;
+export default genDiff;
