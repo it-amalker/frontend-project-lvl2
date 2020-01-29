@@ -1,6 +1,6 @@
 {
   "name": "gendiff-by-amalker",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Difference generator - compares two configuration files and shows a difference.",
   "main": "./src/index.js",
   "scripts": {
@@ -19,13 +19,16 @@
     "dist"
   ],
   "keywords": [
-    "hexlet",
-    "learning",
+    "json",
+    "yaml",
+    "ini files",
+    "config files",
     "javascript",
     "difference generator",
-    "CLI app"
+    "CLI app",
+    "parser"
   ],
-  "author": "Vadim Dmitrenko (amalker) <it.amalker@yandex.ru>",
+  "author": "Vadim Dmitrenko <it.amalker@yandex.ru> (amalker)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/it-amalker/frontend-project-lvl2/issues"
