@@ -5,19 +5,26 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import { convertNums } from './utils';
 
-export default (pathToFile) => {
+const getParser = (filePath) => {
   const formats = {
     json: { extension: '', parserType: JSON.parse },
     yaml: { extension: '.yml', parserType: yaml.safeLoad },
     ini: { extension: '.ini', parserType: ini.parse },
   };
-  const fileExtension = path.extname(pathToFile);
-  const data = fs.readFileSync(pathToFile, 'utf-8');
+  const fileExtension = path.extname(filePath);
   const fileFormat = _.findKey(formats, ['extension', fileExtension]);
   const parser = formats[fileFormat].parserType;
-  const result = parser(data);
+
+  return { parser, fileExtension };
+};
+
+export default (pathToFile) => {
+  const data = fs.readFileSync(pathToFile, 'utf-8');
+  const { parser: parse, fileExtension } = getParser(pathToFile);
+  const parsedData = parse(data);
   if (fileExtension === '.ini') {
-    return convertNums(result);
+    return convertNums(parsedData);
   }
-  return result === null ? '' : result;
+
+  return parsedData === null ? '' : parsedData;
 };
