@@ -10,16 +10,13 @@ describe.only.each`
   ${'JSON'} | ${'before.json'} | ${'after.json'}
   ${'YAML'} | ${'before.yml'}  | ${'after.yml'}
   ${'INI'}  | ${'before.ini'}  | ${'after.ini'}
-`('TESTS', ({
-  format, pathToFile1, pathToFile2,
-}) => {
+`('TESTS', ({ format, pathToFile1, pathToFile2 }) => {
   const before = getFixturePath(pathToFile1);
   const after = getFixturePath(pathToFile2);
 
-  const isIniFormat = () => (format === 'INI' ? '-ini' : '');
-  const defaultOutput = readFile(`result${isIniFormat()}`);
-  const plainOutput = readFile(`result${isIniFormat()}-plain`);
-  const jsonOutput = readFile(`result${isIniFormat()}.json`);
+  const defaultOutput = readFile('result');
+  const plainOutput = readFile('result-plain');
+  const jsonOutput = readFile('result.json');
 
   test(`${format} (default)`, () => {
     expect(genDiff(before, after)).toBe(defaultOutput);
