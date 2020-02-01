@@ -24,7 +24,7 @@ $ make publish
 #### Supported file formats: JSON, YAML, INI
 #### Supported output: default, plain, json
 ```
-$ gendiff --format <output type> <pathToFile1> <pathToFile2>
+$ gendiff --format [output type] <pathToFile1> <pathToFile2>
 ```
 
 #### Compare two JSON files with default output
