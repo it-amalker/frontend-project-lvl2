@@ -6,6 +6,7 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/3c1a2ebe676f2d82a36f/maintainability)](https://codeclimate.com/github/it-amalker/frontend-project-lvl2/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/3c1a2ebe676f2d82a36f/test_coverage)](https://codeclimate.com/github/it-amalker/frontend-project-lvl2/test_coverage)
+![](https://github.com/it-amalker/frontend-project-lvl2/workflows/Github%20Actions/badge.svg)
 [![Build Status](https://travis-ci.org/it-amalker/frontend-project-lvl2.svg?branch=master)](https://travis-ci.org/it-amalker/frontend-project-lvl2)
 
 ### Install packages
