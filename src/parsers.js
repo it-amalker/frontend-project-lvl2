@@ -7,7 +7,7 @@ import { convertNums } from './utils';
 
 const getParser = (filePath) => {
   const formats = {
-    json: { extension: '', parserType: JSON.parse },
+    json: { extension: '.json', parserType: JSON.parse },
     yaml: { extension: '.yml', parserType: yaml.safeLoad },
     ini: { extension: '.ini', parserType: ini.parse },
   };
