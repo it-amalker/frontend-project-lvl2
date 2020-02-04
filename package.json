@@ -1,6 +1,6 @@
 {
   "name": "gendiff-by-amalker",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Difference generator - compares two configuration files and shows a difference.",
   "main": "./src/index.js",
   "scripts": {
