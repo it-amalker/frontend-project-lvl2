@@ -2,22 +2,22 @@ import { isObject, stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, path) => {
-    const rendered = Object.values(tree).reduce((acc, treeValue) => {
+    const rendered = tree.reduce((acc, treeValue) => {
       const {
-        name, status, type, value, valuePrev, children,
-      } = treeValue[0];
+        name, status, type, valueBefore, valueAfter, children,
+      } = treeValue;
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
       const isComplexValue = (item) => (isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
       const renderString = (treeStatus) => {
-        const newValue = isComplexValue(value);
-        const newValuePrev = isComplexValue(valuePrev);
+        const newValueBefore = isComplexValue(valueBefore);
+        const newValueAfter = isComplexValue(valueAfter);
         switch (treeStatus) {
           case 'changed':
-            return [...acc, `Property '${currentPath}' was changed. From ${newValue} to ${newValuePrev}`];
+            return [...acc, `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}`];
           case 'removed':
             return [...acc, `Property '${currentPath}' was deleted`];
           case 'added':
-            return [...acc, `Property '${currentPath}' was added with value: ${newValuePrev}`];
+            return [...acc, `Property '${currentPath}' was added with value: ${newValueAfter}`];
           default:
             return acc;
         }
