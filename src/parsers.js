@@ -5,6 +5,8 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import { convertNums } from './utils';
 
+const readFile = (filePath) => fs.readFileSync(filePath, 'utf-8');
+
 const getParser = (filePath) => {
   const formats = {
     json: { extension: '.json', parserType: JSON.parse },
@@ -19,7 +21,7 @@ const getParser = (filePath) => {
 };
 
 export default (pathToFile) => {
-  const data = fs.readFileSync(pathToFile, 'utf-8');
+  const data = readFile(pathToFile);
   const { parser: parse, fileExtension } = getParser(pathToFile);
   const parsedData = parse(data);
   if (fileExtension === '.ini') {
