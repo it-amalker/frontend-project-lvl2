@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
-import { convertNums } from './utils';
+import { replaceNumericStrings } from './utils';
 
 const readFile = (filePath) => fs.readFileSync(filePath, 'utf-8');
 
@@ -16,7 +16,6 @@ const getParser = (filePath) => {
   const fileExtension = path.extname(filePath);
   const fileFormat = _.findKey(formats, ['extension', fileExtension]);
   const parser = formats[fileFormat].parserType;
-
   return { parser, fileExtension };
 };
 
@@ -24,9 +23,5 @@ export default (pathToFile) => {
   const data = readFile(pathToFile);
   const { parser: parse, fileExtension } = getParser(pathToFile);
   const parsedData = parse(data);
-  if (fileExtension === '.ini') {
-    return convertNums(parsedData);
-  }
-
-  return parsedData === null ? '' : parsedData;
+  return fileExtension === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
 };
