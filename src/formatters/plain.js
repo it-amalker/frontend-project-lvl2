@@ -1,4 +1,5 @@
-import { isObject, stringify } from '../utils';
+import _ from 'lodash';
+import { stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, path) => {
@@ -7,7 +8,7 @@ export default (ast) => {
         name, status, type, valueBefore, valueAfter, children,
       } = treeValue;
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
-      const isComplexValue = (item) => (isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
+      const isComplexValue = (item) => (_.isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
       const renderString = (treeStatus) => {
         const newValueBefore = isComplexValue(valueBefore);
         const newValueAfter = isComplexValue(valueAfter);

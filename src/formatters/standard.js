@@ -1,4 +1,5 @@
-import { isArray, isObject, stringify } from '../utils';
+import _ from 'lodash';
+import { stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, depth) => {
@@ -23,11 +24,11 @@ export default (ast) => {
       }
     };
     const renderObj = (item) => {
-      if (isArray(item)) {
+      if (_.isArray(item)) {
         const mappedArr = item.map((el) => `${renderIndent('object')}${el}`);
         return `[\n${mappedArr.join('\n')}\n${renderIndent('unchanged')}]`;
       }
-      if (isObject(item)) {
+      if (_.isObject(item)) {
         const mappedObj = Object.entries(item).map(([key, value]) => `${renderIndent('object')}${key}: ${stringify(value)}`);
         return `{\n${mappedObj.join('\n')}\n${renderIndent('unchanged')}}`;
       }
