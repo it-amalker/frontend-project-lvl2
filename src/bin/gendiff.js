@@ -2,14 +2,13 @@
 import program from 'commander';
 import genDiff from '..';
 
-
 program
   .description('Compares two configuration files and shows a difference.')
   .version('0.1.0', '-V, --version', 'output the version number')
   .option('-f, --format <type>', 'Output format')
   .arguments('<firstConfig> <secondConfig>')
   .action((firstConfig, secondConfig) => {
-    const { format = 'default' } = program;
+    const { format = 'standard' } = program;
     const outputFormats = ['json', 'plain'];
     const isCorrectFormat = outputFormats.includes(format.toLowerCase());
     if (!isCorrectFormat) {
