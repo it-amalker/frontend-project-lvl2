@@ -3,16 +3,16 @@ import { stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, path) => {
-    const rendered = tree.reduce((acc, treeValue) => {
+    const rendered = tree.reduce((acc, node) => {
       const {
         name, status, type, valueBefore, valueAfter, children,
-      } = treeValue;
+      } = node;
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
       const isComplexValue = (item) => (_.isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
-      const renderString = (treeStatus) => {
+      const renderString = (nodeStatus) => {
         const newValueBefore = isComplexValue(valueBefore);
         const newValueAfter = isComplexValue(valueAfter);
-        switch (treeStatus) {
+        switch (nodeStatus) {
           case 'changed':
             return [...acc, `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}`];
           case 'removed':

@@ -34,23 +34,22 @@ export default (ast) => {
       }
       return stringify(JSON.stringify(item));
     };
-    const rendered = tree.reduce((acc, treeValue) => {
+    const rendered = tree.map((node) => {
       const {
         name, status, type, valueBefore, valueAfter, children,
-      } = treeValue;
-      const renderString = (treeStatus) => {
-        switch (treeStatus) {
+      } = node;
+      const renderNode = (nodeStatus) => {
+        switch (nodeStatus) {
           case 'changed':
-            return [...acc, `${renderIndent(status)}+ ${name}: ${renderObj(valueAfter)}`,
-              `${renderIndent(status)}- ${name}: ${renderObj(valueBefore)}`];
+            return `${renderIndent(status)}+ ${name}: ${renderObj(valueAfter)}\n${renderIndent(status)}- ${name}: ${renderObj(valueBefore)}`;
           default:
-            return [...acc, `${renderIndent(status)}${name}: ${renderObj(valueBefore || valueAfter)}`];
+            return `${renderIndent(status)}${name}: ${renderObj(valueBefore || valueAfter)}`;
         }
       };
       return type === 'children'
-        ? [...acc, `${renderIndent(status)}${name}: {\n${iterAst(children, currentDepth)}\n${renderIndent('unchanged')}}`]
-        : renderString(status);
-    }, []);
+        ? `${renderIndent(status)}${name}: {\n${iterAst(children, currentDepth)}\n${renderIndent('unchanged')}}`
+        : renderNode(status);
+    });
     return `${rendered.join('\n')}`;
   };
   return `{\n${iterAst(ast, 0)}\n}`;
