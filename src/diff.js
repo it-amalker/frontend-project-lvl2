@@ -13,9 +13,11 @@ const genDiff = (object1, object2) => {
     const buildNode = (obj1, obj2) => {
       const value1 = obj1[key];
       const value2 = obj2[key];
+      const isKeyInObj1 = _.has(obj1, key);
+      const isKeyInObj2 = _.has(obj2, key);
       const nodeCondition = {
-        valueRemoved: { check: value1 && !value2 && value2 !== '' },
-        valueAdded: { check: !value1 && value2 && value1 !== '' },
+        valueRemoved: { check: isKeyInObj1 && !isKeyInObj2 },
+        valueAdded: { check: !isKeyInObj1 && isKeyInObj2 },
         valueUnchanged: { check: value1 === value2 && !_.isObject(value1) && !_.isObject(value2) },
         valueIsArray: { check: _.isArray(value1) && _.isArray(value2) },
         valueIsObject: { check: _.isObject(value1) && _.isObject(value2) },
