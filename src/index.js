@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import parse from './parsers';
-import genDiff from './diff';
+import buildAst from './diff';
 import getRenderer from './formatters/index';
 
 const getParsedData = (pathToFile) => {
@@ -12,7 +12,7 @@ const getParsedData = (pathToFile) => {
 
 export default (pathToFile1, pathToFile2, format) => {
   const render = getRenderer(format);
-  const difference = genDiff(getParsedData(pathToFile1), getParsedData(pathToFile2));
+  const difference = buildAst(getParsedData(pathToFile1), getParsedData(pathToFile2));
 
   return render(difference);
 };
