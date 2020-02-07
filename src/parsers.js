@@ -1,27 +1,17 @@
 import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 import { replaceNumericStrings } from './utils';
 
-const readFile = (filePath) => fs.readFileSync(filePath, 'utf-8');
-
-const getParser = (filePath) => {
+export default (data, extension) => {
   const formats = {
     json: { extension: '.json', parserType: JSON.parse },
     yaml: { extension: '.yml', parserType: yaml.safeLoad },
     ini: { extension: '.ini', parserType: ini.parse },
   };
-  const fileExtension = path.extname(filePath);
-  const fileFormat = _.findKey(formats, ['extension', fileExtension]);
-  const parser = formats[fileFormat].parserType;
-  return { parser, fileExtension };
-};
-
-export default (pathToFile) => {
-  const data = readFile(pathToFile);
-  const { parser: parse, fileExtension } = getParser(pathToFile);
+  const format = _.findKey(formats, ['extension', extension]);
+  const parse = formats[format].parserType;
   const parsedData = parse(data);
-  return fileExtension === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
+
+  return extension === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
 };
