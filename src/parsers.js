@@ -1,17 +1,21 @@
-import _ from 'lodash';
 import yaml from 'js-yaml';
 import ini from 'ini';
 import { replaceNumericStrings } from './utils';
 
-export default (data, extension) => {
-  const formats = {
-    json: { extension: '.json', parserType: JSON.parse },
-    yaml: { extension: '.yml', parserType: yaml.safeLoad },
-    ini: { extension: '.ini', parserType: ini.parse },
+export default (data, dataType) => {
+  const getParser = (typeOfData) => {
+    switch (typeOfData) {
+      case 'json':
+        return JSON.parse;
+      case 'yml':
+        return yaml.safeLoad;
+      case 'ini':
+        return ini.parse;
+      default:
+        return null;
+    }
   };
-  const format = _.findKey(formats, ['extension', extension]);
-  const parse = formats[format].parserType;
+  const parse = getParser(dataType);
   const parsedData = parse(data);
-
-  return extension === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
+  return dataType === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
 };
