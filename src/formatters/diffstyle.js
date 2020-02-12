@@ -34,23 +34,21 @@ export default (ast) => {
       }
       return stringify(JSON.stringify(item));
     };
-    const rendered = tree.map((node) => {
+    const renderedResult = tree.map((node) => {
       const {
         name, status, type, valueBefore, valueAfter, children,
       } = node;
       const renderNode = (nodeStatus) => {
-        switch (nodeStatus) {
-          case 'changed':
-            return `${renderIndent(status)}+ ${name}: ${renderObj(valueAfter)}\n${renderIndent(status)}- ${name}: ${renderObj(valueBefore)}`;
-          default:
-            return `${renderIndent(status)}${name}: ${renderObj(valueBefore || valueAfter)}`;
+        if (nodeStatus === 'changed') {
+          return `${renderIndent(status)}+ ${name}: ${renderObj(valueAfter)}\n${renderIndent(status)}- ${name}: ${renderObj(valueBefore)}`;
         }
+        return `${renderIndent(status)}${name}: ${renderObj(valueBefore || valueAfter)}`;
       };
       return type === 'children'
         ? `${renderIndent(status)}${name}: {\n${iterAst(children, currentDepth)}\n${renderIndent('unchanged')}}`
         : renderNode(status);
     });
-    return `${rendered.join('\n')}`;
+    return `${renderedResult.join('\n')}`;
   };
   return `{\n${iterAst(ast, 0)}\n}`;
 };

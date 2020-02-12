@@ -8,7 +8,7 @@ program
   .option('-f, --format <type>', 'Output format')
   .arguments('<firstConfig> <secondConfig>')
   .action((firstConfig, secondConfig) => {
-    const { format = 'standard' } = program;
+    const { format = 'diffstyle' } = program;
     const outputFormats = ['json', 'plain'];
     const isCorrectFormat = outputFormats.includes(format.toLowerCase());
     if (!isCorrectFormat) {
