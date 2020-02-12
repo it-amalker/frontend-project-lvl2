@@ -3,15 +3,15 @@ import { stringify } from '../utils';
 
 export default (ast) => {
   const iterAst = (tree, path) => {
-    const rendered = tree.reduce((acc, node) => {
+    const renderedResult = tree.reduce((acc, node) => {
       const {
         name, status, type, valueBefore, valueAfter, children,
       } = node;
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
-      const isComplexValue = (item) => (_.isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
+      const prerenderValue = (item) => (_.isObject(item) ? '[complex value]' : `'${stringify(JSON.stringify(item))}'`);
       const renderString = (nodeStatus) => {
-        const newValueBefore = isComplexValue(valueBefore);
-        const newValueAfter = isComplexValue(valueAfter);
+        const newValueBefore = prerenderValue(valueBefore);
+        const newValueAfter = prerenderValue(valueAfter);
         switch (nodeStatus) {
           case 'changed':
             return [...acc, `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}`];
@@ -26,7 +26,7 @@ export default (ast) => {
       return type === 'children' ? [...acc, `${iterAst(children, currentPath)}`] : renderString(status);
     }, []);
 
-    return `${rendered.join('\n')}`;
+    return `${renderedResult.join('\n')}`;
   };
 
   return iterAst(ast, '');
