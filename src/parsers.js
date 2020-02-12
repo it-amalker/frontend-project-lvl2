@@ -12,10 +12,9 @@ export default (data, dataType) => {
       case 'ini':
         return ini.parse;
       default:
-        return null;
+        throw new Error('Unsupported data type');
     }
   };
   const parse = getParser(dataType);
-  const parsedData = parse(data);
-  return dataType === '.ini' ? replaceNumericStrings(parsedData) : parsedData;
+  return dataType === 'ini' ? replaceNumericStrings(parse(data)) : parse(data);
 };
