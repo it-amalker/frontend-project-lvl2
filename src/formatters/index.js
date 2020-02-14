@@ -1,4 +1,4 @@
-import diffStyle from './diffstyle';
+import diffStyleRender from './diffstyle';
 import plainRender from './plain';
 import jsonRender from './json';
 
@@ -9,6 +9,6 @@ export default (outputFormat) => {
     case 'json':
       return jsonRender;
     default:
-      return diffStyle;
+      return diffStyleRender;
   }
 };

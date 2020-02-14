@@ -1,52 +1,52 @@
 import _ from 'lodash';
 import { stringify } from '../utils';
 
+const getIndent = (status, depth) => {
+  const defaultIndent = ' '.repeat(4 * depth);
+  const nestedIndent = ' '.repeat(depth === 1 ? 2 : 3 * depth + depth - 2);
+  return status === 'unchanged' ? defaultIndent : nestedIndent;
+};
+
+const renderValue = (item, depth) => {
+  const indent = ' '.repeat(4 * (depth + 1));
+  const bracketsIndent = ' '.repeat(4 * depth);
+  if (_.isArray(item)) {
+    const processedArray = item.map((el) => `${indent}${el}`).join('\n');
+    return `[\n${processedArray}\n${bracketsIndent}]`;
+  }
+  if (_.isObject(item)) {
+    const processedColl = Object.entries(item).map(([key, value]) => `${indent}${key}: ${stringify(value)}`).join('\n');
+    return `{\n${processedColl}\n${bracketsIndent}}`;
+  }
+  return stringify(JSON.stringify(item));
+};
+
 export default (ast) => {
   const iterAst = (tree, depth) => {
     const currentDepth = depth + 1;
-    const renderIndent = (status) => {
-      const defaultIndent = ' '.repeat(4 * currentDepth);
-      const objectIndent = ' '.repeat(4 * (currentDepth + 1));
-      const nestedIndent = ' '.repeat(currentDepth === 1 ? 2 : 3 * currentDepth + currentDepth - 2);
-      switch (status) {
-        case 'unchanged':
-          return defaultIndent;
-        case 'removed':
-          return `${nestedIndent}- `;
-        case 'added':
-          return `${nestedIndent}+ `;
-        case 'changed':
-          return `${nestedIndent}`;
-        case 'object':
-          return objectIndent;
-        default:
-          return nestedIndent;
-      }
-    };
-    const renderObj = (item) => {
-      if (_.isArray(item)) {
-        const mappedArr = item.map((el) => `${renderIndent('object')}${el}`);
-        return `[\n${mappedArr.join('\n')}\n${renderIndent('unchanged')}]`;
-      }
-      if (_.isObject(item)) {
-        const mappedObj = Object.entries(item).map(([key, value]) => `${renderIndent('object')}${key}: ${stringify(value)}`);
-        return `{\n${mappedObj.join('\n')}\n${renderIndent('unchanged')}}`;
-      }
-      return stringify(JSON.stringify(item));
-    };
     const renderedResult = tree.map((node) => {
       const {
         name, status, type, valueBefore, valueAfter, children,
       } = node;
       const renderNode = (nodeStatus) => {
-        if (nodeStatus === 'changed') {
-          return `${renderIndent(status)}+ ${name}: ${renderObj(valueAfter)}\n${renderIndent(status)}- ${name}: ${renderObj(valueBefore)}`;
+        const indent = getIndent(nodeStatus, currentDepth);
+        if (type === 'children') {
+          return `${indent}${name}: {\n${iterAst(children, currentDepth)}\n${indent}}`;
         }
-        return `${renderIndent(status)}${name}: ${renderObj(valueBefore || valueAfter)}`;
+        switch (nodeStatus) {
+          case 'added':
+            return `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}`;
+          case 'removed':
+            return `${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`;
+          case 'changed':
+            return `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}\n${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`;
+          case 'unchanged':
+            return `${indent}${name}: ${renderValue(valueBefore, currentDepth)}`;
+          default:
+            throw new Error(`Unknown ${status} status`);
+        }
       };
-      return type === 'children'
-        ? `${renderIndent(status)}${name}: {\n${iterAst(children, currentDepth)}\n${renderIndent('unchanged')}}`
-        : renderNode(status);
+      return renderNode(status);
     });
     return `${renderedResult.join('\n')}`;
   };
