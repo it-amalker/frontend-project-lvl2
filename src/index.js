@@ -12,7 +12,7 @@ const getParsedData = (pathToFile) => {
 
 export default (pathToFile1, pathToFile2, outputFormat) => {
   const render = getRenderer(outputFormat);
-  const configFilesDifference = buildAst(getParsedData(pathToFile1), getParsedData(pathToFile2));
+  const dataDifference = buildAst(getParsedData(pathToFile1), getParsedData(pathToFile2));
 
-  return render(configFilesDifference);
+  return render(dataDifference);
 };
