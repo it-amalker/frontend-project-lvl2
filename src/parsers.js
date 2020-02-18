@@ -2,20 +2,15 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import { replaceNumericStrings } from './utils';
 
-const getParser = (dataType) => {
+export default (data, dataType) => {
   switch (dataType) {
     case 'json':
-      return JSON.parse;
+      return JSON.parse(data);
     case 'yml':
-      return yaml.safeLoad;
+      return yaml.safeLoad(data);
     case 'ini':
-      return ini.parse;
+      return replaceNumericStrings(ini.parse(data));
     default:
-      throw new Error(`Unsupported ${dataType} data type`);
+      throw new Error(`Unsupported data type: ${dataType}`);
   }
-};
-
-export default (data, dataType) => {
-  const parse = getParser(dataType);
-  return dataType === 'ini' ? replaceNumericStrings(parse(data)) : parse(data);
 };
