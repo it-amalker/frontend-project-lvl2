@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import { stringify } from '../utils';
 
-const getIndent = (status, depth) => {
+const getIndent = (nodeType, depth) => {
   const defaultIndent = ' '.repeat(4 * depth);
   const nestedIndent = ' '.repeat(depth === 1 ? 2 : 3 * depth + depth - 2);
-  return status === 'unchanged' ? defaultIndent : nestedIndent;
+  return nodeType === 'unchanged' || nodeType === 'children' ? defaultIndent : nestedIndent;
 };
 
 const renderValue = (item, depth) => {
@@ -26,14 +26,13 @@ export default (ast) => {
     const currentDepth = depth + 1;
     const renderedResult = tree.map((node) => {
       const {
-        name, status, type, valueBefore, valueAfter, children,
+        name, type, valueBefore, valueAfter, children,
       } = node;
-      const renderNode = (nodeStatus) => {
-        const indent = getIndent(nodeStatus, currentDepth);
-        if (type === 'children') {
-          return `${indent}${name}: {\n${iterAst(children, currentDepth)}\n${indent}}`;
-        }
-        switch (nodeStatus) {
+      const renderNode = (nodeType) => {
+        const indent = getIndent(nodeType, currentDepth);
+        switch (nodeType) {
+          case 'children':
+            return `${indent}${name}: {\n${iterAst(children, currentDepth)}\n${indent}}`;
           case 'added':
             return `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}`;
           case 'removed':
@@ -43,12 +42,12 @@ export default (ast) => {
           case 'unchanged':
             return `${indent}${name}: ${renderValue(valueBefore, currentDepth)}`;
           default:
-            throw new Error(`Unknown ${status} status`);
+            throw new Error(`Unknown node type: ${type}`);
         }
       };
-      return renderNode(status);
+      return renderNode(type);
     });
-    return `${renderedResult.join('\n')}`;
+    return renderedResult.join('\n');
   };
   return `{\n${iterAst(ast, 0)}\n}`;
 };

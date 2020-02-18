@@ -5,33 +5,32 @@ const prerenderValue = (item) => (_.isObject(item) ? '[complex value]' : `'${str
 
 export default (ast) => {
   const iterAst = (tree, path) => {
-    const renderedResult = tree.reduce((acc, node) => {
+    const renderedResult = tree.map((node) => {
       const {
-        name, status, type, valueBefore, valueAfter, children,
+        name, type, valueBefore, valueAfter, children,
       } = node;
       const currentPath = path === '' ? `${path}${name}` : `${path}.${name}`;
-      const renderNode = (nodeStatus) => {
-        if (type === 'children') {
-          return [...acc, `${iterAst(children, currentPath)}`];
-        }
+      const renderNode = (nodeType) => {
         const newValueBefore = prerenderValue(valueBefore);
         const newValueAfter = prerenderValue(valueAfter);
-        switch (nodeStatus) {
+        switch (nodeType) {
+          case 'children':
+            return `${iterAst(children, currentPath)}\n`;
           case 'added':
-            return [...acc, `Property '${currentPath}' was added with value: ${newValueAfter}`];
+            return `Property '${currentPath}' was added with value: ${newValueAfter}\n`;
           case 'removed':
-            return [...acc, `Property '${currentPath}' was deleted`];
+            return `Property '${currentPath}' was deleted\n`;
           case 'changed':
-            return [...acc, `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}`];
+            return `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}\n`;
           case 'unchanged':
-            return acc;
+            return '';
           default:
-            throw new Error(`Unknown ${status} status`);
+            throw new Error(`Unknown node type: ${type}`);
         }
       };
-      return renderNode(status);
-    }, []);
-    return `${renderedResult.join('\n')}`;
+      return renderNode(type);
+    }).join('');
+    return renderedResult.replace(/\n$/, '');
   };
   return iterAst(ast, '');
 };
