@@ -24,7 +24,7 @@ const renderValue = (item, depth) => {
 export default (ast) => {
   const iterAst = (tree, depth) => {
     const currentDepth = depth + 1;
-    const renderedResult = tree.map((node) => {
+    return tree.map((node) => {
       const {
         name, type, valueBefore, valueAfter, children,
       } = node;
@@ -46,8 +46,7 @@ export default (ast) => {
         }
       };
       return renderNode(type);
-    });
-    return renderedResult.join('\n');
+    }).join('\n');
   };
   return `{\n${iterAst(ast, 0)}\n}`;
 };

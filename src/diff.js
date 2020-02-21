@@ -9,10 +9,8 @@ const buildAst = (object1, object2) => {
       valueBefore: '',
       valueAfter: '',
     };
-    const value1 = obj1[key];
-    const value2 = obj2[key];
-    const isKeyInObj1 = _.has(obj1, key);
-    const isKeyInObj2 = _.has(obj2, key);
+    const [value1, value2] = [obj1[key], obj2[key]];
+    const [isKeyInObj1, isKeyInObj2] = [_.has(obj1, key), _.has(obj2, key)];
     if (isKeyInObj1 && !isKeyInObj2) {
       return { ...node, type: 'removed', valueBefore: value1 };
     }
