@@ -12,20 +12,14 @@ export default (ast) => {
     const renderNode = (nodeType) => {
       const newValueBefore = prerenderValue(valueBefore);
       const newValueAfter = prerenderValue(valueAfter);
-      switch (nodeType) {
-        case 'children':
-          return `${iterAst(children, currentPath)}\n`;
-        case 'added':
-          return `Property '${currentPath}' was added with value: ${newValueAfter}\n`;
-        case 'removed':
-          return `Property '${currentPath}' was deleted\n`;
-        case 'changed':
-          return `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}\n`;
-        case 'unchanged':
-          return null;
-        default:
-          throw new Error(`Unknown node type: ${type}`);
-      }
+      const nodeByNodeType = {
+        children: () => `${iterAst(children, currentPath)}\n`,
+        added: () => `Property '${currentPath}' was added with value: ${newValueAfter}\n`,
+        removed: () => `Property '${currentPath}' was deleted\n`,
+        changed: () => `Property '${currentPath}' was changed. From ${newValueBefore} to ${newValueAfter}\n`,
+        unchanged: () => null,
+      };
+      return nodeByNodeType[nodeType]();
     };
     return renderNode(type);
   }).join('').replace(/\n$/, '');

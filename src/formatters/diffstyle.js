@@ -30,20 +30,14 @@ export default (ast) => {
       } = node;
       const renderNode = (nodeType) => {
         const indent = getIndent(nodeType, currentDepth);
-        switch (nodeType) {
-          case 'children':
-            return `${indent}${name}: {\n${iterAst(children, currentDepth)}\n${indent}}`;
-          case 'added':
-            return `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}`;
-          case 'removed':
-            return `${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`;
-          case 'changed':
-            return `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}\n${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`;
-          case 'unchanged':
-            return `${indent}${name}: ${renderValue(valueBefore, currentDepth)}`;
-          default:
-            throw new Error(`Unknown node type: ${type}`);
-        }
+        const nodeByNodeType = {
+          children: () => `${indent}${name}: {\n${iterAst(children, currentDepth)}\n${indent}}`,
+          added: () => `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}`,
+          removed: () => `${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`,
+          changed: () => `${indent}+ ${name}: ${renderValue(valueAfter, currentDepth)}\n${indent}- ${name}: ${renderValue(valueBefore, currentDepth)}`,
+          unchanged: () => `${indent}${name}: ${renderValue(valueBefore, currentDepth)}`,
+        };
+        return nodeByNodeType[nodeType]();
       };
       return renderNode(type);
     }).join('\n');
