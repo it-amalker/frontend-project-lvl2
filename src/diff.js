@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { isObjectAndNotArray } from './utils';
 
 const buildAst = (object1, object2) => {
-  const commonKeys = _.union(_.keys(object1), _.keys(object2));
+  const combinedKeys = _.union(_.keys(object1), _.keys(object2));
   const buildNode = (key, obj1, obj2) => {
     const node = {
       name: key,
@@ -13,8 +13,8 @@ const buildAst = (object1, object2) => {
 
     const value1 = obj1[key];
     const value2 = obj2[key];
-    const isKeyInObj1 = _.has(obj1, key);
-    const isKeyInObj2 = _.has(obj2, key);
+    const isKeyInObj1 = Reflect.has(obj1, key);
+    const isKeyInObj2 = Reflect.has(obj2, key);
 
     const nodeTypes = {
       removed: { check: isKeyInObj1 && !isKeyInObj2 },
@@ -36,7 +36,7 @@ const buildAst = (object1, object2) => {
 
     return nodeByNodeType[currentNodeType]();
   };
-  return commonKeys.sort().map((currentKey) => buildNode(currentKey, object1, object2));
+  return combinedKeys.sort().map((currentKey) => buildNode(currentKey, object1, object2));
 };
 
 export default buildAst;
